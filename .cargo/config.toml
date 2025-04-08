@@ -1,0 +1,12 @@
+[target.'cfg(target_arch = "xtensa")']
+runner = "probe-rs run --chip=esp32s3 --always-print-stacktrace --no-location --catch-hardfault"
+#runner = "espflash flash --monitor"
+
+[build]
+target = "xtensa-esp32s3-none-elf"
+
+[unstable]
+build-std = ["core", "alloc"]
+
+[env]
+DEFMT_LOG = "debug"
