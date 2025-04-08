@@ -1,6 +1,6 @@
 # bitaxe-raw usbserial Firmware
 
-This repository contains USB device-side firmware for the bitaxe series boards.
+bitaxe-raw is firmware for the ESP32S3 on the bitaxe series boards. It will pass through ASIC UART, Board I2C, GPIO and ADC over usbserial. This can be used for research, testing and debugging.
 
 ## Developing
 
@@ -16,7 +16,7 @@ cargo install probe-rs-tools --locked
 cargo install cargo-binutils
 ```
 
-For USB-based development and debugging:
+For building and flashing over USB:
 
 ```Shell
 . $HOME/export-esp.sh
@@ -24,18 +24,14 @@ For USB-based development and debugging:
 # Build the latest firmware:
 cargo build --release
 
-# Build, program, and attach to the device:
-cargo run --release
-
-# Just flash the device, don't attach to RTT:
+# Flash the device:
 cargo flash --release --chip esp32s3
-
-# Erase all flash memory:
-probe-rs erase --chip esp32s3 --allow-erase-all
 ```
 
+After programming bitaxe-raw to your Bitaxe, if you ever want to change the firmware again you'll need to put the ESP32 into the bootloader. This can be done by holding the `BOOT` button as you attach power.
+
 ## Running
-When connected the bitaxe, this usbserial firmware will create two serial ports. Usually the first serial port is "control serial" like I2C, GPIO, and ADC. The second serial port is "data serial" and is pass through UART.
+When connected, this usbserial firmware will create two serial ports. Usually the first serial port is "control serial" like I2C, GPIO, and ADC. The second serial port is "data serial" and is pass through UART.
 
 ### Data Serial
 - Second serial port
