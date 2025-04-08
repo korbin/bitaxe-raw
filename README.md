@@ -2,7 +2,7 @@
 
 This repository contains USB device-side firmware for the bitaxe series boards.
 
-### Developing
+## Developing
 
 Install Rust:
 
@@ -33,3 +33,84 @@ cargo flash --release --chip esp32s3
 # Erase all flash memory:
 probe-rs erase --chip esp32s3 --allow-erase-all
 ```
+
+## Running
+When connected the bitaxe, this usbserial firmware will create two serial ports. Usually the first serial port is "control serial" like I2C, GPIO, and ADC. The second serial port is "data serial" and is pass through UART.
+
+### Data Serial
+- Second serial port
+- All data is passed through, both directions.
+- usbserial baudrate is mirrored on the output.
+
+
+### Control Serial
+- First serial port
+- baudrate does not matter
+
+**Packet Format**
+
+| 0      | 1      | 2  | 3   | 4    | 5   | 6... |
+|--------|--------|----|-----|------|-----|------|
+| LEN LO | LEN HI | ID | BUS | PAGE | CMD | DATA |
+
+```
+0. length low
+1. length high
+	- packet length is number of bytes of the whole packet. 
+2. command id
+	- Whatever byte you want. will be returned in the response 
+3. command bus
+	- always 0x00 
+4. command page
+	- I2C:  0x05
+	- GPIO: 0x06
+	- ADC:  0x07
+5. command 
+	- varies by command page. See below
+6. data
+	- data to write. variable length. See below
+```
+
+**I2C**
+
+Commands:
+
+- write: 0x20
+- read: 0x30
+- readwrite: 0x40
+
+Data:
+
+- [I2C address, (bytes to write), (number of bytes to read)]
+
+Example:
+
+- write 0xDE to addr 0x4F: `08 00 01 00 05 20 4F DE`
+- read one byte from addr 0x4C: `08 00 01 00 05 30 4C 01`
+- readwrite two bytes from addr 0x32, reg 0xFE: `09 00 01 00 05 40 32 FE 02`
+
+**GPIO**
+
+Commands:
+
+- Pin Number
+
+Data:
+
+- [pin level]
+
+Example
+
+- Set pin 1 Low: `07 00 00 00 06 01 00`
+
+**ADC**
+
+Commands:
+
+- read VDD: 0x50
+- read VIN: 0x51
+
+Example:
+
+- read VDD Pin: `06 00 00 00 07 50`
+
