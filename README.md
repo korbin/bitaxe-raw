@@ -33,6 +33,8 @@ After programming bitaxe-raw to your Bitaxe, if you ever want to change the firm
 ## Running
 When connected, this usbserial firmware will create two serial ports. Usually the first serial port is "control serial" like I2C, GPIO, and ADC. The second serial port is "data serial" and is pass through UART.
 
+After startup, the ASIC is held in reset by GPIO RST_N in order to minimize heat and power until the host device is connected and ready to use the ASIC. Enable it by setting RST_N High via the control serial port.
+
 ### Data Serial
 - Second serial port
 - All data is passed through, both directions.
