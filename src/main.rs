@@ -88,7 +88,7 @@ async fn main(spawner: Spawner) {
 
     let asic_uart = {
         let config = esp_hal::uart::Config::default().with_baudrate(115200).with_rx(esp_hal::uart::RxConfig::default().with_fifo_full_threshold(64));
-        esp_hal::uart::Uart::new(p.UART1, config).unwrap().with_rx(p.GPIO17).with_tx(p.GPIO18).into_async()
+        esp_hal::uart::Uart::new(p.UART1, config).unwrap().with_rx(p.GPIO18).with_tx(p.GPIO17).into_async()
     };
 
     let i2c = {
