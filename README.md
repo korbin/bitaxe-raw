@@ -91,7 +91,7 @@ Example:
 
 Commands:
 
-- Pin Number
+- RST_N: 0x00
 
 Data:
 
