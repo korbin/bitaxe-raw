@@ -99,7 +99,7 @@ async fn main(spawner: Spawner) {
     };
 
     let gpio_pins = control::gpio::Pins {
-        asic_resetn: gpio::Output::new(p.GPIO1, gpio::Level::High, gpio::OutputConfig::default()),
+        asic_resetn: gpio::Output::new(p.GPIO1, gpio::Level::Low, gpio::OutputConfig::default()),
     };
 
     let mut adc_config = adc::AdcConfig::default();
